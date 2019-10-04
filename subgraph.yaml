@@ -1,4 +1,4 @@
-specVersion: 0.0.1
+specVersion: 0.0.2
 schema:
   file: ./schema.graphql
 dataSources:
@@ -10,53 +10,55 @@ dataSources:
       abi: Contract
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.2
+      apiVersion: 0.0.3
       language: wasm/assemblyscript
       entities:
-        - Donate
-        - DonateAndCreateGiver
-        - EscapeFundsCalled
-        - PaymentAuthorized
-        - PaymentExecuted
-        - PaymentCanceled
-        - SpenderAuthorization
-        - Pause
-        - Unpause
-        - EscapeHatchBlackistedToken
-        - EscapeHatchCalled
-        - OwnershipRequested
-        - OwnershipTransferred
-        - OwnershipRemoved
+        - Payment
+        - MetaData
+        # - Donate
+        # - DonateAndCreateGiver
+        # - EscapeFundsCalled
+        # - PaymentAuthorized
+        # - PaymentExecuted
+        # - PaymentCanceled
+        # - SpenderAuthorization
+        # - Pause
+        # - Unpause
+        # - EscapeHatchBlackistedToken
+        # - EscapeHatchCalled
+        # - OwnershipRequested
+        # - OwnershipTransferred
+        # - OwnershipRemoved
       abis:
         - name: Contract
           file: ./abis/Contract.json
       eventHandlers:
-        - event: Donate(uint64,uint64,address,uint256)
-          handler: handleDonate
-        - event: DonateAndCreateGiver(address,uint64,address,uint256)
-          handler: handleDonateAndCreateGiver
-        - event: EscapeFundsCalled(address,uint256)
-          handler: handleEscapeFundsCalled
-        - event: PaymentAuthorized(indexed uint256,indexed address,uint256,address,bytes32)
-          handler: handlePaymentAuthorized
+        # - event: Donate(uint64,uint64,address,uint256)
+        #   handler: handleDonate
+        # - event: DonateAndCreateGiver(address,uint64,address,uint256)
+        #   handler: handleDonateAndCreateGiver
+        # - event: EscapeFundsCalled(address,uint256)
+        #   handler: handleEscapeFundsCalled
+        # - event: PaymentAuthorized(indexed uint256,indexed address,uint256,address,bytes32)
+        #   handler: handlePaymentAuthorized
         - event: PaymentExecuted(indexed uint256,indexed address,uint256,address)
           handler: handlePaymentExecuted
-        - event: PaymentCanceled(indexed uint256)
-          handler: handlePaymentCanceled
-        - event: SpenderAuthorization(indexed address,bool)
-          handler: handleSpenderAuthorization
-        - event: Pause()
-          handler: handlePause
-        - event: Unpause()
-          handler: handleUnpause
-        - event: EscapeHatchBlackistedToken(address)
-          handler: handleEscapeHatchBlackistedToken
-        - event: EscapeHatchCalled(address,uint256)
-          handler: handleEscapeHatchCalled
-        - event: OwnershipRequested(indexed address,indexed address)
-          handler: handleOwnershipRequested
-        - event: OwnershipTransferred(indexed address,indexed address)
-          handler: handleOwnershipTransferred
-        - event: OwnershipRemoved()
-          handler: handleOwnershipRemoved
+        # - event: PaymentCanceled(indexed uint256)
+        #   handler: handlePaymentCanceled
+        # - event: SpenderAuthorization(indexed address,bool)
+        #   handler: handleSpenderAuthorization
+        # - event: Pause()
+        #   handler: handlePause
+        # - event: Unpause()
+        #   handler: handleUnpause
+        # - event: EscapeHatchBlackistedToken(address)
+        #   handler: handleEscapeHatchBlackistedToken
+        # - event: EscapeHatchCalled(address,uint256)
+        #   handler: handleEscapeHatchCalled
+        # - event: OwnershipRequested(indexed address,indexed address)
+        #   handler: handleOwnershipRequested
+        # - event: OwnershipTransferred(indexed address,indexed address)
+        #   handler: handleOwnershipTransferred
+        # - event: OwnershipRemoved()
+        #   handler: handleOwnershipRemoved
       file: ./src/mapping.ts
