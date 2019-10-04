@@ -1,0 +1,62 @@
+specVersion: 0.0.1
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Contract
+    network: mainnet
+    source:
+      address: "0x30f938fed5de6e06a9a7cd2ac3517131c317b1e7"
+      abi: Contract
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.2
+      language: wasm/assemblyscript
+      entities:
+        - Donate
+        - DonateAndCreateGiver
+        - EscapeFundsCalled
+        - PaymentAuthorized
+        - PaymentExecuted
+        - PaymentCanceled
+        - SpenderAuthorization
+        - Pause
+        - Unpause
+        - EscapeHatchBlackistedToken
+        - EscapeHatchCalled
+        - OwnershipRequested
+        - OwnershipTransferred
+        - OwnershipRemoved
+      abis:
+        - name: Contract
+          file: ./abis/Contract.json
+      eventHandlers:
+        - event: Donate(uint64,uint64,address,uint256)
+          handler: handleDonate
+        - event: DonateAndCreateGiver(address,uint64,address,uint256)
+          handler: handleDonateAndCreateGiver
+        - event: EscapeFundsCalled(address,uint256)
+          handler: handleEscapeFundsCalled
+        - event: PaymentAuthorized(indexed uint256,indexed address,uint256,address,bytes32)
+          handler: handlePaymentAuthorized
+        - event: PaymentExecuted(indexed uint256,indexed address,uint256,address)
+          handler: handlePaymentExecuted
+        - event: PaymentCanceled(indexed uint256)
+          handler: handlePaymentCanceled
+        - event: SpenderAuthorization(indexed address,bool)
+          handler: handleSpenderAuthorization
+        - event: Pause()
+          handler: handlePause
+        - event: Unpause()
+          handler: handleUnpause
+        - event: EscapeHatchBlackistedToken(address)
+          handler: handleEscapeHatchBlackistedToken
+        - event: EscapeHatchCalled(address,uint256)
+          handler: handleEscapeHatchCalled
+        - event: OwnershipRequested(indexed address,indexed address)
+          handler: handleOwnershipRequested
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: OwnershipRemoved()
+          handler: handleOwnershipRemoved
+      file: ./src/mapping.ts
