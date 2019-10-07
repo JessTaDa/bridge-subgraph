@@ -12,14 +12,15 @@ type Payment @entity {
   recipient: Bytes!        # Who is receiving the funds
   token: Bytes!           # Token this payment represents
   amount: BigInt!              # The amount of wei sent in the payment
-  securityGuardDelay: BigInt! # The seconds `securityGuard` can delay payment
   status: PaymentStatus # executed, authorized, cancelled
 }
 
 type MetaData @entity {
   id: ID!
-  numberOfAuthorizedPayments: Int
-  latestBlock: Int
+  numOfPaymentsCancelled: BigInt!
+  numOfPaymentsAuthorized: BigInt!
+  numOfPaymentsExecuted: BigInt!
+  authorisedPayments: [Payment!]!
 }
 
 # type Vault @entity {

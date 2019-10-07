@@ -39,12 +39,12 @@ dataSources:
         #   handler: handleDonateAndCreateGiver
         # - event: EscapeFundsCalled(address,uint256)
         #   handler: handleEscapeFundsCalled
-        # - event: PaymentAuthorized(indexed uint256,indexed address,uint256,address,bytes32)
-        #   handler: handlePaymentAuthorized
+        - event: PaymentAuthorized(indexed uint256,indexed address,uint256,address,bytes32)
+          handler: handlePaymentAuthorized
         - event: PaymentExecuted(indexed uint256,indexed address,uint256,address)
           handler: handlePaymentExecuted
-        # - event: PaymentCanceled(indexed uint256)
-        #   handler: handlePaymentCanceled
+        - event: PaymentCanceled(indexed uint256)
+          handler: handlePaymentCanceled
         # - event: SpenderAuthorization(indexed address,bool)
         #   handler: handleSpenderAuthorization
         # - event: Pause()
