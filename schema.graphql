@@ -21,14 +21,6 @@ type MetaData @entity {
   executedPayments: [Payment!]!
 }
 
-# type Vault @entity {
-#   id: ID!
-#   escapeHatchCaller: Bytes! #The address of a trusted account or contract to call `escapeHatch()` to send the ether in this contract to the `escapeHatchDestination` 
-#   escapeHatchDestination: Bytes! #The address of a safe location (usu a Multisig) to send the ether held in this contract in an emergency
-#   absoluteMinTimeLock: BigInt! #The minimum number of seconds `timelock` can be set to, if set to 0 the `owner` can remove the `timeLock` completely
-#   timeLock: BigInt! #Initial number of seconds that payments are delayed after they are authorized (a security precaution)
-#   securityGuard: Bytes! #Address that will be able to delay the payments beyond the initial timelock requirements; can be set to 0x0 to remove the `securityGuard` functionality
-#   maxSecurityGuardDelay: BigInt! #The maximum number of seconds in total that `securityGuard` can delay a payment so that the owner can cancel the payment if needed
-# }
+
 
 
