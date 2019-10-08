@@ -8,25 +8,11 @@ import {
 import { Payment, MetaData } from "../generated/schema"
 import { log } from '@graphprotocol/graph-ts'
 
-// function calculateAuthorizedPayments(event: EthereumEvent): void {
-//   let contract = Contract.bind(event.address)
-//   let meta = MetaData.load('')
-//   let numberOfAuthorizedPayments = contract.numberOfAuthorizedPayments() //function returns uint 
-//   if(meta == null){
-//     meta = new MetaData(event.transaction.from.toHex())
-//   }
-//   meta.numberOfAuthorizedPayments = numberOfAuthorizedPayments.toI32()
-//   meta.latestBlock = event.block.number.toI32()
-//   meta.save()
-// }
-
 export function handlePaymentExecuted(event: PaymentExecuted): void {
   let contract = Contract.bind(event.address)
   let entity = Payment.load(event.params.idPayment.toString())
   if(entity == null){
-    // log.info("CREATING NEW ENTITY..., from: {}", [event.params.idPayment.toString()])
-    entity = new Payment(event.params.idPayment.toString()) //Does this become the ID?
-    entity.address = event.params.idPayment
+    entity = new Payment(event.params.idPayment.toString()) 
     entity.name = contract.authorizedPayments(event.params.idPayment).value0
     entity.spender = contract.authorizedPayments(event.params.idPayment).value2
     entity.recipient = contract.authorizedPayments(event.params.idPayment).value6
@@ -35,15 +21,26 @@ export function handlePaymentExecuted(event: PaymentExecuted): void {
   }
   entity.status = "executed"
   entity.save()
-  // calculateAuthorizedPayments(event);
+
+  let meta = MetaData.load("")
+  if(meta == null) {
+    meta = new MetaData("")
+    meta.numOfPaymentsAuthorized = BigInt.fromI32(0)
+    meta.numOfPaymentsCancelled = BigInt.fromI32(0)
+    meta.executedPayments = new Array<string>()  
+  }
+  meta.numOfPaymentsAuthorized = meta.numOfPaymentsAuthorized.plus(BigInt.fromI32(1)) as BigInt
+  let executedPaymentsArray = meta.executedPayments
+  executedPaymentsArray.push(entity.id)  
+  meta.executedPayments = executedPaymentsArray
+  meta.save()
 }
 
 export function handlePaymentAuthorized(event: PaymentAuthorized): void {
   let contract = Contract.bind(event.address)
   let entity = Payment.load(event.params.idPayment.toString())
   if(entity == null){
-    entity = new Payment(event.params.idPayment.toString()) //Does this become the ID?
-    entity.address = event.params.idPayment
+    entity = new Payment(event.params.idPayment.toString()) 
     entity.name = contract.authorizedPayments(event.params.idPayment).value0
     entity.spender = contract.authorizedPayments(event.params.idPayment).value2
     entity.recipient = contract.authorizedPayments(event.params.idPayment).value6
@@ -52,27 +49,14 @@ export function handlePaymentAuthorized(event: PaymentAuthorized): void {
   }
   entity.status = "authorized"
   entity.save()
-
-  let meta = MetaData.load("")
-  if(meta == null) {
-    meta = new MetaData("")
-    meta.numOfPaymentsAuthorized = BigInt.fromI32(0)
-    meta.authorisedPayments = new Array<string>()  
-  }
-  meta.numOfPaymentsAuthorized = meta.numOfPaymentsAuthorized.plus(BigInt.fromI32(1))
-  let authorizedPayments = meta.authorisedPayments
-  authorizedPayments.push(entity.id)  
-  meta.authorisedPayments = authorizedPayments
-  meta.save()
 }
 
 export function handlePaymentCanceled(event: PaymentCanceled): void {
   let contract = Contract.bind(event.address)
   let entity = Payment.load(event.params.idPayment.toString())
   if(entity == null){
-    entity = new Payment(event.params.idPayment.toString()) //Does this become the ID?
+    entity = new Payment(event.params.idPayment.toString())
   }
-  entity.address = event.params.idPayment
   entity.name = contract.authorizedPayments(event.params.idPayment).value0
   entity.spender = contract.authorizedPayments(event.params.idPayment).value2
   entity.recipient = contract.authorizedPayments(event.params.idPayment).value6
@@ -84,9 +68,11 @@ export function handlePaymentCanceled(event: PaymentCanceled): void {
   let meta = MetaData.load("")
   if(meta == null) {
     meta = new MetaData("")
+    meta.numOfPaymentsAuthorized = BigInt.fromI32(0)
     meta.numOfPaymentsCancelled = BigInt.fromI32(0)
+    meta.executedPayments = new Array<string>()  
   }
-  meta.numOfPaymentsCancelled = meta.numOfPaymentsCancelled.plus(BigInt.fromI32(1))
+  meta.numOfPaymentsCancelled = meta.numOfPaymentsCancelled.plus(BigInt.fromI32(1)) as BigInt
   meta.save()
 }
 

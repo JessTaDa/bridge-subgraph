@@ -6,7 +6,6 @@ enum PaymentStatus {
 
 type Payment @entity {
   id: ID!       # Reference of the payment.
-  address: BigInt!
   name: String!            # What is the purpose of this payment
   spender: Bytes!         # Who is sending the funds
   recipient: Bytes!        # Who is receiving the funds
@@ -17,10 +16,9 @@ type Payment @entity {
 
 type MetaData @entity {
   id: ID!
-  numOfPaymentsCancelled: BigInt!
   numOfPaymentsAuthorized: BigInt!
-  numOfPaymentsExecuted: BigInt!
-  authorisedPayments: [Payment!]!
+  numOfPaymentsCancelled: BigInt!
+  executedPayments: [Payment!]!
 }
 
 # type Vault @entity {
