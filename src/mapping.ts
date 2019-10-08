@@ -11,13 +11,15 @@ import { log } from '@graphprotocol/graph-ts'
 export function handlePaymentExecuted(event: PaymentExecuted): void {
   let contract = Contract.bind(event.address)
   let entity = Payment.load(event.params.idPayment.toString())
-  if(entity == null){
+  if (entity == null) {
+    let paymentFromContract = contract.authorizedPayments(event.params.idPayment)
     entity = new Payment(event.params.idPayment.toString()) 
-    entity.name = contract.authorizedPayments(event.params.idPayment).value0
-    entity.spender = contract.authorizedPayments(event.params.idPayment).value2
-    entity.recipient = contract.authorizedPayments(event.params.idPayment).value6
-    entity.token = contract.authorizedPayments(event.params.idPayment).value7
-    entity.amount = contract.authorizedPayments(event.params.idPayment).value8
+    entity.address = event.params.idPayment
+    entity.name = paymentFromContract.value0
+    entity.spender = paymentFromContract.value2
+    entity.recipient = paymentFromContract.value6
+    entity.token = paymentFromContract.value7
+    entity.amount = paymentFromContract.value8
   }
   entity.status = "executed"
   entity.save()
@@ -39,13 +41,15 @@ export function handlePaymentExecuted(event: PaymentExecuted): void {
 export function handlePaymentAuthorized(event: PaymentAuthorized): void {
   let contract = Contract.bind(event.address)
   let entity = Payment.load(event.params.idPayment.toString())
-  if(entity == null){
-    entity = new Payment(event.params.idPayment.toString()) 
-    entity.name = contract.authorizedPayments(event.params.idPayment).value0
-    entity.spender = contract.authorizedPayments(event.params.idPayment).value2
-    entity.recipient = contract.authorizedPayments(event.params.idPayment).value6
-    entity.token = contract.authorizedPayments(event.params.idPayment).value7
-    entity.amount = contract.authorizedPayments(event.params.idPayment).value8
+  if (entity == null) {
+    let paymentFromContract = contract.authorizedPayments(event.params.idPayment)
+    entity = new Payment(event.params.idPayment.toString())
+    entity.address = event.params.idPayment
+    entity.name = paymentFromContract.value0
+    entity.spender = paymentFromContract.value2
+    entity.recipient = paymentFromContract.value6
+    entity.token = paymentFromContract.value7
+    entity.amount = paymentFromContract.value8
   }
   entity.status = "authorized"
   entity.save()
@@ -54,15 +58,17 @@ export function handlePaymentAuthorized(event: PaymentAuthorized): void {
 export function handlePaymentCanceled(event: PaymentCanceled): void {
   let contract = Contract.bind(event.address)
   let entity = Payment.load(event.params.idPayment.toString())
-  if(entity == null){
+  if (entity == null) {
     entity = new Payment(event.params.idPayment.toString())
   }
-  entity.name = contract.authorizedPayments(event.params.idPayment).value0
-  entity.spender = contract.authorizedPayments(event.params.idPayment).value2
-  entity.recipient = contract.authorizedPayments(event.params.idPayment).value6
-  entity.token = contract.authorizedPayments(event.params.idPayment).value7
-  entity.amount = contract.authorizedPayments(event.params.idPayment).value8
-  entity.status = "cancelled"
+  let paymentFromContract = contract.authorizedPayments(event.params.idPayment)
+  entity.address = event.params.idPayment
+  entity.name = paymentFromContract.value0
+  entity.spender = paymentFromContract.value2
+  entity.recipient = paymentFromContract.value6
+  entity.token = paymentFromContract.value7
+  entity.amount = paymentFromContract.value8
+  entity.status = 'cancelled'
   entity.save()
 
   let meta = MetaData.load("")
